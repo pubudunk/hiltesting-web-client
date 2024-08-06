@@ -146,3 +146,15 @@ table[hidden] {
 table:not([hidden]) {
   opacity: 1;
 }
+
+/* Error Banner Styles */
+.error-banner {
+  background-color: #f2d7d5; /* Light red background */
+  color: #c0392b; /* Red text */
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px; /* Slightly smaller font size */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

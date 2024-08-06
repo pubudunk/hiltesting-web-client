@@ -9,9 +9,12 @@ const tests = [
     { id: 5, len: 0, data: 0, name: 'CAN Test' }
 ];
 
+const replyCodes = ["Pass", "Fail", "N/A"];
+
 function App() {
     const [selectedTests, setSelectedTests] = useState(tests.map(test => ({ ...test, selected: true })));
     const [results, setResults] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
     const ws = useRef(null);
 
     useEffect(() => {
@@ -44,10 +47,17 @@ function App() {
             name: test.name
         }));
 
+        if (selectedTestsPayload.length === 0) {
+          setErrorMessage('Error: No tests selected.');
+          return;
+        }
+
+        // Clear error message if there are selected tests
+        setErrorMessage('');
+
         // Send JSON via WebSocket
         if (ws.current) {
             console.log(JSON.stringify({ action: 'sendTestCases', tests: selectedTestsPayload }));
-
             ws.current.send(JSON.stringify({ action: 'sendTestCases', tests: selectedTestsPayload }));
         }
     };
@@ -56,6 +66,11 @@ function App() {
         const newSelectedTests = [...selectedTests];
         newSelectedTests[index].selected = !newSelectedTests[index].selected;
         setSelectedTests(newSelectedTests);
+
+        // Clear error message if a test is selected
+        if (newSelectedTests.some(test => test.selected)) {
+          setErrorMessage('');
+        }
     };
 
     return (
@@ -80,6 +95,11 @@ function App() {
                     </div>
                     <button type="submit">Execute</button>
                 </form>
+                {errorMessage && (
+                    <div className="error-banner">
+                        {errorMessage}
+                    </div>
+                )}
                 {Array.isArray(results) && results.length > 0 && (
                     <table>
                         <thead>
@@ -94,7 +114,7 @@ function App() {
                                 <tr key={result.id}>
                                     <td>{result.id}</td>
                                     <td>{result.name}</td>
-                                    <td>{result.result}</td>
+                                    <td>{replyCodes[result.result - 1]}</td>
                                 </tr>
                             ))}
                         </tbody>
