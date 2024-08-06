@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 const tests = [
-    { id: '01', name: 'GPIO Output Test' },
-    { id: '02', name: 'GPIO Input/Output Test' },
-    { id: '03', name: 'UART Test' },
-    { id: '04', name: 'I2C Test' },
-    { id: '05', name: 'CAN Test' }
+    { id: 1, len: 0, data: 0, name: 'GPIO Output Test' },
+    { id: 2, len: 0, data: 0, name: 'GPIO Input/Output Test' },
+    { id: 3, len: 0, data: 0, name: 'UART Test' },
+    { id: 4, len: 0, data: 0, name: 'I2C Test' },
+    { id: 5, len: 0, data: 0, name: 'CAN Test' }
 ];
 
 function App() {
@@ -39,6 +39,8 @@ function App() {
         event.preventDefault();
         const selectedTestsPayload = selectedTests.filter(test => test.selected).map(test => ({
             id: test.id,
+            len: test.len,
+            data: test.data,
             name: test.name
         }));
 
